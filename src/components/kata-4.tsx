@@ -1,7 +1,7 @@
 import { useLocalStorage } from "../hooks/use-local-storage";
 
 export function Kata4() {
-  const { actualValue, setActualValue } = useLocalStorage("text-input", "");
+  const [ actualValue, setActualValue ] = useLocalStorage("text-input", "");
 
   return (
     <div>
