@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 interface ITodo {
   title: string;
@@ -49,9 +49,9 @@ export function Kata2() {
     });
   };
 
-  const handleChangeFilter = () =>{ 
-    setFilterIncompleted(prevFilter => !prevFilter)
-  }
+  const handleChangeFilter = () => {
+    setFilterIncompleted((prevFilter) => !prevFilter);
+  };
 
   const handleSave = () => {
     addTodo({
@@ -61,6 +61,13 @@ export function Kata2() {
     setCurrCompleted(false);
     setCurrText("");
   };
+
+  const filteredTodos = useMemo(() => {
+    if (filterIncompleted) {
+      return todos.filter((todo) => !todo.completed);
+    }
+    return todos;
+  }, [todos, filterIncompleted]);
 
   return (
     <div>
@@ -83,17 +90,13 @@ export function Kata2() {
           save todo
         </button>
         <button type="button" onClick={handleChangeFilter}>
-          {filterIncompleted ? "show all": "show only incompleted"} 
+          {filterIncompleted ? "show all" : "show only incompleted"}
         </button>
       </div>
 
       <div>
         <h1>Todos</h1>
-        {todos.map((todo) => {
-          if (filterIncompleted && todo.completed) {
-            return
-          }
-
+        {filteredTodos.map((todo) => {
           return (
             <div key={todo.id}>
               <h4>title: {todo.title}</h4>
