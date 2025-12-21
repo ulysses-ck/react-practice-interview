@@ -2,32 +2,25 @@ import { useEffect } from "react";
 import { useFetchUsers } from "../hooks/use-fetch-users";
 
 export function Kata6() {
-  const { data, error, fetchData, isLoading, setData } = useFetchUsers();
+  const { data, error, fetchData, isLoading } = useFetchUsers();
 
   useEffect(() => {
-    (async () => {
-      await fetchData();
-    })();
+    const controller = new AbortController();
+    fetchData(controller.signal);
 
     return () => {
-      setData(null);
+      controller.abort();
     };
   }, []);
 
   return (
     <div>
       data:
-      {isLoading ? (
-        <h3>Loading...</h3>
-      ) : data && data.length > 0 ? (
-        <div>
-          {data.map((el) => (
-            <div key={el.id}>{el.name}</div>
-          ))}
-        </div>
-      ) : (
-        <h2>{error}</h2>
-      )}
+      {isLoading && <h3>Loading...</h3>}
+      {data?.map((user) => (
+        <div key={user.id}>{user.name}</div>
+      ))}
+      {error && <h2>{error}</h2>}
     </div>
   );
 }

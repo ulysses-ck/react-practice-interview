@@ -7,9 +7,9 @@ export function useFetchUsers() {
   const [data, setData] = useState<IUser[] | null>(null);
   const [error, setError] = useState<string>("");
 
-  const fetchData = async () => {
+  const fetchData = async (signal?: AbortSignal) => {
     setIsLoading(true)
-    const { data: dataUsers, error: errorUsers } = await fetchUsers();
+    const { data: dataUsers, error: errorUsers } = await fetchUsers(signal);
 
     if (dataUsers && dataUsers.length > 0) {
       setData(dataUsers);
@@ -20,7 +20,6 @@ export function useFetchUsers() {
   };
 
   return {
-    setData,
     data,
     isLoading,
     error,
