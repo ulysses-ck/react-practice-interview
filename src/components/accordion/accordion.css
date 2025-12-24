@@ -1,0 +1,9 @@
+.accordion-content {
+    max-height: 0;
+    overflow: hidden;
+}
+
+.active > .accordion-content {
+    max-height: 300px;
+    background-color: red;
+}
