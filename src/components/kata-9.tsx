@@ -1,42 +1,36 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useProject } from "../hooks/use-project";
 
 export function Kata9() {
   const { addTask, changeName, project, removeTask } = useProject();
   const [newTask, setNewTask] = useState<string>("");
-  const [error, setError] = useState<string>("");
+
+  const isProjectNameInvalid = project.projectName.trim() === "";
+  const areTasksInvalid = project.tasks.length === 0;
+  const isFormInvalid = isProjectNameInvalid || areTasksInvalid;
+
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    if(error !== "") {
+    if(!isFormInvalid) {
         changeName("");
-        setNewTask("");
         console.log(project);
     }
   };
 
-  const pushTask = () => {
-    if (newTask === "") {
-      setError("New task cannot be empty");
-    } else {
-      addTask(newTask);
+  const handlePushTalk = () => {
+    if (newTask.trim() !== "") {
+        addTask(newTask);
+        setNewTask("");
     }
   };
 
-  useEffect(() => {
-    if (project.projectName === "") {
-      setError("Project name cannot be empty");
-    } else if (project.tasks.length === 0) {
-      setError("Project needs at least to have one task");
-    } else {
-      setError("");
-    }
-  }, [project]);
-
   return (
     <form onSubmit={handleSubmit}>
-      {error && <span>{error}</span>}
+        {isProjectNameInvalid && <span>Project name is required</span>}
+      {areTasksInvalid && <span>At least one task is required</span>}
+
       <div>
         <label htmlFor="project-name">Project name</label>
         <input
@@ -57,22 +51,22 @@ export function Kata9() {
             onChange={(e) => setNewTask(e.currentTarget.value)}
           />
 
-          <button type="button" onClick={pushTask}>
+          <button type="button" onClick={handlePushTalk}>
             Add task
           </button>
         </div>
       </div>
 
-      <div>
+      <ul>
         {project.tasks.length > 0 &&
           project.tasks.map((t, idx) => (
-            <div key={`${t}-${idx}`}>
+            <li key={idx}>
               <span>{t}</span>
               <button onClick={() => removeTask(idx)}>Delete task</button>
-            </div>
+            </li>
           ))}
-      </div>
-      <button type="submit">
+      </ul>
+      <button type="submit" disabled={isFormInvalid}>
           Submit
       </button>
     </form>
