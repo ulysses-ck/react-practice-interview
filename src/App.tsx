@@ -6,6 +6,7 @@ import { Kata5 } from "./components/kata-5";
 import { Kata6 } from "./components/kata-6";
 import { Kata7 } from "./components/kata-7";
 import { Kata8 } from "./components/kata-8";
+import { Kata9 } from "./components/kata-9";
 import { ThemeProvider } from "./providers/theme-provider";
 
 function App() {
@@ -19,7 +20,9 @@ function App() {
         {/* <Kata5 /> */}
         {/* <Kata6 /> */}
         {/* <Kata7 /> */}
-        <Kata8 />
+        {/* <Kata8 /> */}
+
+        <Kata9 />
       </div>
     </ThemeProvider>
   );
